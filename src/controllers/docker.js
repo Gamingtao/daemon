@@ -522,7 +522,7 @@ class Docker {
 
                 // Make the container
                 // if clustered
-                if config.env.clustered {
+                // if config.env.clustered {
                     const Container = {
                         Image: _.trimStart(config.image, '~'),
                         name: this.server.json.uuid,
@@ -585,64 +585,64 @@ class Docker {
                             OomKillDisable: _.get(config, 'oom_disabled', false),
                         },
                     };
-                } else {
-                    const Container = {
-                        Image: _.trimStart(config.image, '~'),
-                        name: this.server.json.uuid,
-                        Hostname: Config.get('docker.network.hostname', this.server.json.uuid).toString(),
-                        User: Config.get('docker.container.user', 1000).toString(),
-                        AttachStdin: true,
-                        AttachStdout: true,
-                        AttachStderr: true,
-                        OpenStdin: true,
-                        Tty: true,
-                        Env: environment,
-                        ExposedPorts: exposed,
-                        HostConfig: {
-                            Mounts: [
-                                {
-                                    Target: '/home/container',
-                                    Source: this.server.path(),
-                                    Type: 'bind',
-                                    ReadOnly: false,
-                                },
-                                {
-                                    Target: Config.get('docker.timezone_path'),
-                                    Source: Config.get('docker.timezone_path'),
-                                    Type: 'bind',
-                                    ReadOnly: true,
-                                },
-                            ],
-                            Tmpfs: {
-                                '/tmp': Config.get('docker.policy.container.tmpfs', 'rw,exec,nosuid,size=50M'),
-                            },
-                            PortBindings: bindings,
-                            Memory: Math.round(this.hardlimit(config.memory) * 1000000),
-                            MemoryReservation: Math.round(config.memory * 1000000),
-                            MemorySwap: -1,
-                            CpuQuota: (config.cpu > 0) ? config.cpu * 1000 : -1,
-                            CpuPeriod: 100000,
-                            CpuShares: _.get(config, 'cpu_shares', 1024),
-                            BlkioWeight: config.io,
-                            Dns: Config.get('docker.dns', ['8.8.8.8', '8.8.4.4']),
-                            LogConfig: {
-                                Type: 'json-file',
-                                Config: {
-                                    'max-size': Config.get('docker.policy.container.log_opts.max_size', '5m'),
-                                    'max-file': Config.get('docker.policy.container.log_opts.max_files', '1'),
-                                },
-                            },
-                            SecurityOpt: Config.get('docker.policy.container.securityopts', ['no-new-privileges']),
-                            ReadonlyRootfs: Config.get('docker.policy.container.readonly_root', true),
-                            CapDrop: Config.get('docker.policy.container.cap_drop', [
-                                'setpcap', 'mknod', 'audit_write', 'net_raw', 'dac_override',
-                                'fowner', 'fsetid', 'net_bind_service', 'sys_chroot', 'setfcap',
-                            ]),
-                            NetworkMode: Config.get('docker.network.name', 'pterodactyl_nw'),
-                            OomKillDisable: _.get(config, 'oom_disabled', false),
-                        },
-                    };
-                }
+                // } else {
+                //     const Container = {
+                //         Image: _.trimStart(config.image, '~'),
+                //         name: this.server.json.uuid,
+                //         Hostname: Config.get('docker.network.hostname', this.server.json.uuid).toString(),
+                //         User: Config.get('docker.container.user', 1000).toString(),
+                //         AttachStdin: true,
+                //         AttachStdout: true,
+                //         AttachStderr: true,
+                //         OpenStdin: true,
+                //         Tty: true,
+                //         Env: environment,
+                //         ExposedPorts: exposed,
+                //         HostConfig: {
+                //             Mounts: [
+                //                 {
+                //                     Target: '/home/container',
+                //                     Source: this.server.path(),
+                //                     Type: 'bind',
+                //                     ReadOnly: false,
+                //                 },
+                //                 {
+                //                     Target: Config.get('docker.timezone_path'),
+                //                     Source: Config.get('docker.timezone_path'),
+                //                     Type: 'bind',
+                //                     ReadOnly: true,
+                //                 },
+                //             ],
+                //             Tmpfs: {
+                //                 '/tmp': Config.get('docker.policy.container.tmpfs', 'rw,exec,nosuid,size=50M'),
+                //             },
+                //             PortBindings: bindings,
+                //             Memory: Math.round(this.hardlimit(config.memory) * 1000000),
+                //             MemoryReservation: Math.round(config.memory * 1000000),
+                //             MemorySwap: -1,
+                //             CpuQuota: (config.cpu > 0) ? config.cpu * 1000 : -1,
+                //             CpuPeriod: 100000,
+                //             CpuShares: _.get(config, 'cpu_shares', 1024),
+                //             BlkioWeight: config.io,
+                //             Dns: Config.get('docker.dns', ['8.8.8.8', '8.8.4.4']),
+                //             LogConfig: {
+                //                 Type: 'json-file',
+                //                 Config: {
+                //                     'max-size': Config.get('docker.policy.container.log_opts.max_size', '5m'),
+                //                     'max-file': Config.get('docker.policy.container.log_opts.max_files', '1'),
+                //                 },
+                //             },
+                //             SecurityOpt: Config.get('docker.policy.container.securityopts', ['no-new-privileges']),
+                //             ReadonlyRootfs: Config.get('docker.policy.container.readonly_root', true),
+                //             CapDrop: Config.get('docker.policy.container.cap_drop', [
+                //                 'setpcap', 'mknod', 'audit_write', 'net_raw', 'dac_override',
+                //                 'fowner', 'fsetid', 'net_bind_service', 'sys_chroot', 'setfcap',
+                //             ]),
+                //             NetworkMode: Config.get('docker.network.name', 'pterodactyl_nw'),
+                //             OomKillDisable: _.get(config, 'oom_disabled', false),
+                //         },
+                //     };
+                // }
 
                 if (config.swap >= 0) {
                     Container.HostConfig.MemorySwap = Math.round((this.hardlimit(config.memory) + config.swap) * 1000000);
