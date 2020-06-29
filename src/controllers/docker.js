@@ -546,7 +546,7 @@ class Docker {
                                 {
                                     Target: '/home/container/cluster',
                                     Source: config.env.clusterid,
-                                    Type: 'bind',
+                                    Type: 'volume',
                                     ReadOnly: false,
                                 },
                                 {
