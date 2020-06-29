@@ -522,7 +522,7 @@ class Docker {
 
                 // Make the container
                 // if clustered
-                if (config.env.clustered == true) {
+                if config.env.clustered {
                     const Container = {
                         Image: _.trimStart(config.image, '~'),
                         name: this.server.json.uuid,
